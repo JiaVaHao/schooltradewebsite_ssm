@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright(c)2020
+  ~  项目名称:hbxytrade
+  ~  文件名称:rebel-remote.xml
+  ~  Date:2020/3/28 下午7:13
+  ~  Author:Code Ant Jiang
+  ~  *请勿抄袭或作毕设，抄袭必究！
+  -->
+
+<rebel-remote xmlns="http://www.zeroturnaround.com/rebel/remote">
+    <id>com.jwh.www.Trade__Website</id>
+</rebel-remote>

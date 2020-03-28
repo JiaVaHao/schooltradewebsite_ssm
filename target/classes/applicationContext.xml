@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~  Copyright(c)2020
+  ~  项目名称:hbxytrade
+  ~  文件名称:applicationContext.xml
+  ~  Date:2020/3/28 下午7:13
+  ~  Author:Code Ant Jiang
+  ~  *请勿抄袭或作毕设，抄袭必究！
+  -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="classpath:application-dao.xml" />
+    <import resource="classpath:application-redis.xml" />
+    <import resource="classpath:application-service.xml" />
+    <import resource="classpath:application-shiro.xml" />
+</beans>

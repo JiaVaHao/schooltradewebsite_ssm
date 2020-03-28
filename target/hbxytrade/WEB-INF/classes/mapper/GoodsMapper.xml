@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jwh.trade.dao.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.jwh.trade.javabean.Goods">
+        <id column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_title" jdbcType="VARCHAR" property="goodsTitle"/>
+        <result column="show_img" jdbcType="VARCHAR" property="showImg"/>
+        <result column="first_level_id" jdbcType="INTEGER" property="firstLevelId"/>
+        <result column="second_level_id" jdbcType="INTEGER" property="secondLevelId"/>
+        <result column="goods_degree" jdbcType="INTEGER" property="goodsDegree"/>
+        <result column="master_gender" jdbcType="INTEGER" property="masterGender"/>
+        <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice"/>
+        <result column="trade_type" jdbcType="INTEGER" property="tradeType"/>
+        <result column="master_qq" jdbcType="VARCHAR" property="masterQq"/>
+        <result column="goods_describe" jdbcType="VARCHAR" property="goodsDescribe"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="group_img" jdbcType="VARCHAR" property="groupImg"/>
+        <result column="browse_num" jdbcType="INTEGER" property="browseNum"/>
+        <result column="favorites_num" jdbcType="INTEGER" property="favoritesNum"/>
+    </resultMap>
+    <resultMap id="ResultMapWithLevelName" type="com.jwh.trade.javabean.Goods">
+        <id column="goods_id" jdbcType="INTEGER" property="goodsId"/>
+        <result column="goods_title" jdbcType="VARCHAR" property="goodsTitle"/>
+        <result column="show_img" jdbcType="VARCHAR" property="showImg"/>
+        <result column="first_level_id" jdbcType="INTEGER" property="firstLevelId"/>
+        <result column="second_level_id" jdbcType="INTEGER" property="secondLevelId"/>
+        <result column="goods_degree" jdbcType="INTEGER" property="goodsDegree"/>
+        <result column="master_gender" jdbcType="INTEGER" property="masterGender"/>
+        <result column="goods_price" jdbcType="DECIMAL" property="goodsPrice"/>
+        <result column="trade_type" jdbcType="INTEGER" property="tradeType"/>
+        <result column="master_qq" jdbcType="VARCHAR" property="masterQq"/>
+        <result column="goods_describe" jdbcType="VARCHAR" property="goodsDescribe"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="group_img" jdbcType="VARCHAR" property="groupImg"/>
+        <result column="browse_num" jdbcType="INTEGER" property="browseNum"/>
+        <result column="favorites_num" jdbcType="INTEGER" property="favoritesNum"/>
+        <association property="firstLevel" javaType="com.jwh.trade.javabean.FirstLevel">
+            <id column="first_level_id" property="firstLevelId"/>
+            <result column="first_level_name" property="firstLevelName"/>
+        </association>
+        <association property="secondLevel" javaType="com.jwh.trade.javabean.SecondLevel">
+            <id column="second_level_id" property="secondLevelId"/>
+            <result column="second_level_name" property="secondLevelName"/>
+        </association>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        goods_id, goods_title, show_img, first_level_id, second_level_id, goods_degree, master_gender,
+    goods_price, trade_type, master_qq, goods_describe, create_time, group_img, browse_num, 
+    favorites_num,student_id
+    </sql>
+    <sql id="WithName_Column_List">
+        goods_id, goods_title, show_img, c.first_level_id first_level_id, first_level_name, c.second_level_id second_level_id, second_level_name,
+    goods_degree,master_gender,goods_price, trade_type, master_qq, goods_describe, create_time, group_img, browse_num, favorites_num,student_id
+    </sql>
+    <select id="selectByExample" parameterType="com.jwh.trade.javabean.GoodsExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from create_goods
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExampleWithLevelName" parameterType="com.jwh.trade.javabean.GoodsExample"
+            resultMap="ResultMapWithLevelName">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="WithName_Column_List"/>
+        from (create_goods c inner join first_level f on c.first_level_id=f.first_level_id)
+        inner join second_level s on c.second_level_id=s.second_level_id
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from create_goods
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </select>
+    <select id="selectByPrimaryKeyWithLevelName" parameterType="java.lang.Integer" resultMap="ResultMapWithLevelName">
+        select
+        <include refid="WithName_Column_List"/>
+        from (create_goods c inner join first_level f on c.first_level_id=f.first_level_id)
+        inner join second_level s on c.second_level_id=s.second_level_id
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from create_goods
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.jwh.trade.javabean.GoodsExample">
+        delete from create_goods
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.jwh.trade.javabean.Goods">
+        insert into create_goods (goods_id, goods_title, show_img,
+                                  first_level_id, second_level_id, goods_degree,
+                                  master_gender, goods_price, trade_type,
+                                  master_qq, goods_describe, create_time,
+                                  group_img, browse_num, favorites_num, student_id)
+        values (#{goodsId,jdbcType=INTEGER}, #{goodsTitle,jdbcType=VARCHAR}, #{showImg,jdbcType=VARCHAR},
+                #{firstLevelId,jdbcType=INTEGER}, #{secondLevelId,jdbcType=INTEGER}, #{goodsDegree,jdbcType=INTEGER},
+                #{masterGender,jdbcType=INTEGER}, #{goodsPrice,jdbcType=DECIMAL}, #{tradeType,jdbcType=INTEGER},
+                #{masterQq,jdbcType=VARCHAR}, #{goodsDescribe,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+                #{groupImg,jdbcType=VARCHAR}, #{browseNum,jdbcType=INTEGER}, #{favoritesNum,jdbcType=INTEGER},
+                #{studentId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="com.jwh.trade.javabean.Goods">
+        insert into create_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                goods_id,
+            </if>
+            <if test="goodsTitle != null">
+                goods_title,
+            </if>
+            <if test="showImg != null">
+                show_img,
+            </if>
+            <if test="firstLevelId != null">
+                first_level_id,
+            </if>
+            <if test="secondLevelId != null">
+                second_level_id,
+            </if>
+            <if test="goodsDegree != null">
+                goods_degree,
+            </if>
+            <if test="masterGender != null">
+                master_gender,
+            </if>
+            <if test="goodsPrice != null">
+                goods_price,
+            </if>
+            <if test="tradeType != null">
+                trade_type,
+            </if>
+            <if test="masterQq != null">
+                master_qq,
+            </if>
+            <if test="goodsDescribe != null">
+                goods_describe,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="groupImg != null">
+                group_img,
+            </if>
+            <if test="browseNum != null">
+                browse_num,
+            </if>
+            <if test="favoritesNum != null">
+                favorites_num,
+            </if>
+            <if test="studentId != null">
+                student_id,
+            </if>
+            <if test="goodsVisible != null">
+                goods_visible,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">
+                #{goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsTitle != null">
+                #{goodsTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="showImg != null">
+                #{showImg,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLevelId != null">
+                #{firstLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="secondLevelId != null">
+                #{secondLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsDegree != null">
+                #{goodsDegree,jdbcType=INTEGER},
+            </if>
+            <if test="masterGender != null">
+                #{masterGender,jdbcType=INTEGER},
+            </if>
+            <if test="goodsPrice != null">
+                #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="tradeType != null">
+                #{tradeType,jdbcType=INTEGER},
+            </if>
+            <if test="masterQq != null">
+                #{masterQq,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsDescribe != null">
+                #{goodsDescribe,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupImg != null">
+                #{groupImg,jdbcType=VARCHAR},
+            </if>
+            <if test="browseNum != null">
+                #{browseNum,jdbcType=INTEGER},
+            </if>
+            <if test="favoritesNum != null">
+                #{favoritesNum,jdbcType=INTEGER},
+            </if>
+            <if test="studentId != null">
+                #{studentId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsVisible != null">
+                #{goodsVisible,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.jwh.trade.javabean.GoodsExample" resultType="java.lang.Long">
+        select count(*) from create_goods
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update create_goods
+        <set>
+            <if test="record.goodsId != null">
+                goods_id = #{record.goodsId,jdbcType=INTEGER},
+            </if>
+            <if test="record.goodsTitle != null">
+                goods_title = #{record.goodsTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="record.showImg != null">
+                show_img = #{record.showImg,jdbcType=VARCHAR},
+            </if>
+            <if test="record.firstLevelId != null">
+                first_level_id = #{record.firstLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="record.secondLevelId != null">
+                second_level_id = #{record.secondLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="record.goodsDegree != null">
+                goods_degree = #{record.goodsDegree,jdbcType=INTEGER},
+            </if>
+            <if test="record.masterGender != null">
+                master_gender = #{record.masterGender,jdbcType=INTEGER},
+            </if>
+            <if test="record.goodsPrice != null">
+                goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="record.tradeType != null">
+                trade_type = #{record.tradeType,jdbcType=INTEGER},
+            </if>
+            <if test="record.masterQq != null">
+                master_qq = #{record.masterQq,jdbcType=VARCHAR},
+            </if>
+            <if test="record.goodsDescribe != null">
+                goods_describe = #{record.goodsDescribe,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.groupImg != null">
+                group_img = #{record.groupImg,jdbcType=VARCHAR},
+            </if>
+            <if test="record.browseNum != null">
+                browse_num = #{record.browseNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.favoritesNum != null">
+                favorites_num = #{record.favoritesNum,jdbcType=INTEGER},
+            </if>
+            <if test="record.studentId != null">
+                student_id = #{record.studentId,jdbcType=INTEGER},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update create_goods
+        set goods_id = #{record.goodsId,jdbcType=INTEGER},
+        goods_title = #{record.goodsTitle,jdbcType=VARCHAR},
+        show_img = #{record.showImg,jdbcType=VARCHAR},
+        first_level_id = #{record.firstLevelId,jdbcType=INTEGER},
+        second_level_id = #{record.secondLevelId,jdbcType=INTEGER},
+        goods_degree = #{record.goodsDegree,jdbcType=INTEGER},
+        master_gender = #{record.masterGender,jdbcType=INTEGER},
+        goods_price = #{record.goodsPrice,jdbcType=DECIMAL},
+        trade_type = #{record.tradeType,jdbcType=INTEGER},
+        master_qq = #{record.masterQq,jdbcType=VARCHAR},
+        goods_describe = #{record.goodsDescribe,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        group_img = #{record.groupImg,jdbcType=VARCHAR},
+        browse_num = #{record.browseNum,jdbcType=INTEGER},
+        favorites_num = #{record.favoritesNum,jdbcType=INTEGER}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.jwh.trade.javabean.Goods">
+        update create_goods
+        <set>
+            <if test="goodsTitle != null">
+                goods_title = #{goodsTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="showImg != null">
+                show_img = #{showImg,jdbcType=VARCHAR},
+            </if>
+            <if test="firstLevelId != null">
+                first_level_id = #{firstLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="secondLevelId != null">
+                second_level_id = #{secondLevelId,jdbcType=INTEGER},
+            </if>
+            <if test="goodsDegree != null">
+                goods_degree = #{goodsDegree,jdbcType=INTEGER},
+            </if>
+            <if test="masterGender != null">
+                master_gender = #{masterGender,jdbcType=INTEGER},
+            </if>
+            <if test="goodsPrice != null">
+                goods_price = #{goodsPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="tradeType != null">
+                trade_type = #{tradeType,jdbcType=INTEGER},
+            </if>
+            <if test="masterQq != null">
+                master_qq = #{masterQq,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsDescribe != null">
+                goods_describe = #{goodsDescribe,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="groupImg != null">
+                group_img = #{groupImg,jdbcType=VARCHAR},
+            </if>
+            <if test="browseNum != null">
+                browse_num = #{browseNum,jdbcType=INTEGER},
+            </if>
+            <if test="favoritesNum != null">
+                favorites_num = #{favoritesNum,jdbcType=INTEGER},
+            </if>
+            <if test="goodsVisible != null">
+                goods_visible = #{goodsVisible,jdbcType=INTEGER},
+            </if>
+        </set>
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.jwh.trade.javabean.Goods">
+        update create_goods
+        set goods_title     = #{goodsTitle,jdbcType=VARCHAR},
+            show_img        = #{showImg,jdbcType=VARCHAR},
+            first_level_id  = #{firstLevelId,jdbcType=INTEGER},
+            second_level_id = #{secondLevelId,jdbcType=INTEGER},
+            goods_degree    = #{goodsDegree,jdbcType=INTEGER},
+            master_gender   = #{masterGender,jdbcType=INTEGER},
+            goods_price     = #{goodsPrice,jdbcType=DECIMAL},
+            trade_type      = #{tradeType,jdbcType=INTEGER},
+            master_qq       = #{masterQq,jdbcType=VARCHAR},
+            goods_describe  = #{goodsDescribe,jdbcType=VARCHAR},
+            create_time     = #{createTime,jdbcType=TIMESTAMP},
+            group_img       = #{groupImg,jdbcType=VARCHAR},
+            browse_num      = #{browseNum,jdbcType=INTEGER},
+            favorites_num   = #{favoritesNum,jdbcType=INTEGER}
+        where goods_id = #{goodsId,jdbcType=INTEGER}
+    </update>
+</mapper>
